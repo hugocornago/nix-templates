@@ -13,7 +13,7 @@
         description = "A simple Python flake.";
       };
 
-      python = {
+      java = {
         path = ./templates/java;
         description = "A simple Java flake.";
       };
