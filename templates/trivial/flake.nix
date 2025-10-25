@@ -1,29 +1,20 @@
 {
   description = "trivial-template";
 
-	inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.flake-parts.url = "github:hercules-ci/flake-parts";
 
-  outputs = { self, nixpkgs }:
-    let
-      # System types to support.
-      supportedSystems = [ "x86_64-linux" ];
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
-
-    in
+  outputs = inputs @ {flake-parts, ...}:
+    flake-parts.lib.mkFlake {inherit inputs;}
     {
-      devShells = forAllSystems (system:
-        let
-          pkgs = nixpkgsFor.${system};
-        in
-        {
-          default = pkgs.mkShell {
-            buildInputs = with pkgs; [  ];
-						shellHook = ''
-							zsh
-							exit $?
-						'';
-          };
-        });
+      systems = ["x86_64-linux" "x86_64-darwin"];
+      perSystem = {pkgs, ...}: {
+        devShells.default = pkgs.mkShell {
+          nativeBuildInputs = with pkgs; [];
+          shellHook = ''
+            exec zsh
+          '';
+        };
+      };
     };
 }
