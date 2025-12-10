@@ -1,7 +1,7 @@
 {
   description = "A Collection of Personal Nix Flake Templates";
 
-  outputs = { self, ... }: {
+  outputs = {self, ...}: {
     templates = {
       trivial = {
         path = ./templates/trivial;
@@ -16,6 +16,11 @@
       java = {
         path = ./templates/java;
         description = "A simple Java flake.";
+      };
+
+      rust = {
+        path = ./templates/rust;
+        description = "A simple Rust flake.";
       };
 
       defaultTemplate = self.templates.trivial;
